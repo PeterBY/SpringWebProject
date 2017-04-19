@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,14 +9,38 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+@Entity
+@Table(name = "meals")
+@NamedQueries({
+        @NamedQuery(name = "delete",
+                query = "DELETE FROM Meal meal WHERE meal.id=:id AND meal.user.id=:userId"),
+        @NamedQuery(name = "get",
+                query = "SELECT meal FROM Meal meal WHERE meal.id=:id AND meal.user.id=:userId"),
+        @NamedQuery(name = "getAll",
+                query = "SELECT meal FROM Meal meal WHERE meal.user.id=:userId ORDER BY meal.dateTime DESC"),
+        @NamedQuery(name = "getBetween",
+                query = "SELECT meal FROM Meal meal WHERE meal.user.id=:userId AND meal.dateTime BETWEEN :startDate AND :endDate ORDER BY meal.dateTime DESC")
+})
 public class Meal extends BaseEntity {
+//
+//    public int intId = 100005;
+//
+//    @Id
+//    @GeneratedValue
+//    @Column(name = "id")
+//    private Integer id;
+
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "calories")
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+//    @Transient
     private User user;
 
     public Meal() {
