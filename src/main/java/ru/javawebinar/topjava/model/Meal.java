@@ -5,10 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-/**
- * GKislin
- * 11.01.2015.
- */
 @Entity
 @Table(name = "meals")
 @NamedQueries({
@@ -22,13 +18,6 @@ import java.time.LocalTime;
                 query = "SELECT meal FROM Meal meal WHERE meal.user.id=:userId AND meal.dateTime BETWEEN :startDate AND :endDate ORDER BY meal.dateTime DESC")
 })
 public class Meal extends BaseEntity {
-//
-//    public int intId = 100005;
-//
-//    @Id
-//    @GeneratedValue
-//    @Column(name = "id")
-//    private Integer id;
 
     @Column(name = "date_time")
     private LocalDateTime dateTime;
@@ -40,7 +29,6 @@ public class Meal extends BaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @Transient
     private User user;
 
     public Meal() {
