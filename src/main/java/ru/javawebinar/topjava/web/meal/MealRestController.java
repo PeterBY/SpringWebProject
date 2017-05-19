@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
@@ -15,9 +13,6 @@ import java.util.List;
 @RequestMapping(path = MealRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealRestController extends AbstractMealController {
     static final String REST_URL = "/rest/meals";
-
-    @Autowired(required = false)
-    private ConversionService conversionService;
 
     @GetMapping("/{id}")
     public Meal get(@PathVariable int id) {
@@ -45,24 +40,19 @@ public class MealRestController extends AbstractMealController {
 //        @RequestParam(value = "startTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
 //        @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
 //        @RequestParam(value = "endTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime) {
-//            if (startDate == null && startTime == null && startTime == null && startTime == null)
+//            if (startDate == null && startTime == null && endDate == null && endTime == null)
 //                return super.getAll();
 //            return super.getBetween(startDate, startTime, endDate, endTime);
 //    }
 
     @GetMapping
     public List<MealWithExceed> getAllOrWithFilter(
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "startTime", required = false) String startTime,
-            @RequestParam(value = "endDate", required = false) String endDate,
-            @RequestParam(value = "endTime", required = false) String endTime) {
-        if (startDate == null && startTime == null && startTime == null && startTime == null)
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @RequestParam(value = "startTime", required = false) LocalTime startTime,
+            @RequestParam(value = "endDate", required = false) LocalDate endDate,
+            @RequestParam(value = "endTime", required = false) LocalTime endTime) {
+        if (startDate == null && startTime == null && endDate == null && endTime == null)
             return super.getAll();
-
-        return super.getBetween(
-                startDate != null ? conversionService.convert(startDate, LocalDate.class) : null,
-                startTime != null ? conversionService.convert(startTime, LocalTime.class) : null,
-                endDate != null ? conversionService.convert(endDate, LocalDate.class) : null,
-                endTime != null ? conversionService.convert(endTime, LocalTime.class) : null);
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }
